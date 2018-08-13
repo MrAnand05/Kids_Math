@@ -8,7 +8,7 @@ List<Widget> createRod(int firstRodCount, String sign, int secondRodCount) {
     containers.add(Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        height: 80.0,
+        height: 60.0,
         width: 10.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),
@@ -23,7 +23,7 @@ List<Widget> createRod(int firstRodCount, String sign, int secondRodCount) {
     containers.add(Padding(
       padding: const EdgeInsets.all(4.0),
       child: Container(
-        height: 80.0,
+        height: 60.0,
         width: 10.0,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.0),

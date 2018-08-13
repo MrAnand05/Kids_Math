@@ -33,7 +33,8 @@ class cCBState extends State<cCB> {
   Widget build(BuildContext context) {
     final LevelOne widgetA=context.ancestorWidgetOfExactType(LevelOne);
     final LevelOneState state=widgetA?.levelOneState;
-
+    final MyInheritedWidgetState state1 = MyInheritedWidget.of(context);
+    
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(90.0), color: colorB),
@@ -49,6 +50,7 @@ class cCBState extends State<cCB> {
             } else {
               state.isAnswered=true;
               if (widget.label == widget.result) {
+                state1.addItem(Icon(Icons.star,color: Colors.orange,size: 35.0,));
                 colorIC = Colors.yellowAccent;
                 colorB = Colors.greenAccent;
               } else {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kids_math/Application.dart';
 import 'package:kids_math/Level1.dart';
 import 'package:kids_math/RotateYAxis.dart';
-import 'package:kids_math/button.dart';
 
 void main() => runApp(new MyApp());
 
@@ -26,8 +26,7 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => new _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage>
-    with TickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   AnimationController _controller;
   AnimationController _controllerScale;
   Animation<double> animation;
@@ -38,13 +37,12 @@ class _MyHomePageState extends State<MyHomePage>
     _controller =
         AnimationController(duration: Duration(seconds: 5), vsync: this);
     _controllerScale =
-        AnimationController(duration: Duration(seconds: 3), vsync: this);        
+        AnimationController(duration: Duration(seconds: 3), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0).animate(_controller);
     scaleAnimation = Tween(begin: 0.5, end: 1.0).animate(_controllerScale);
     _controller.forward();
     _controllerScale.forward();
-    if(_controllerScale.status==AnimationStatus.completed)
-    {
+    if (_controllerScale.status == AnimationStatus.completed) {
       _controllerScale.reverse();
     }
     _controller.repeat();
@@ -54,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage>
   @override
   void dispose() {
     _controller.dispose();
+    _controllerScale.dispose();
     super.dispose();
   }
 
@@ -91,18 +90,19 @@ class _MyHomePageState extends State<MyHomePage>
             ),
           ),
           Container(
-            //color: Colors.green.withOpacity(0.5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 animatedText,
-                SizedBox(height: 30.0,),
+                SizedBox(
+                  height: 30.0,
+                ),
                 Container(
                   width: 200.0,
                   height: 200.0,
                   child: Opacity(
                     opacity: 0.8,
-                                      child: ScaleTransition(
+                    child: ScaleTransition(
                       scale: scaleAnimation,
                       child: Image.asset(
                         'assets/images/PaavaniPassport.jpg',
@@ -111,29 +111,33 @@ class _MyHomePageState extends State<MyHomePage>
                     ),
                   ),
                 ),
-                SizedBox(height: 30.0,),
-                button('Level 1 (Age 5)', () {
+                SizedBox(
+                  height: 30.0,
+                ),
+                button(buttonTextStyle(label: 'Level 1 (Age 5)'), () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LevelOne(),
+                        builder: (context) => LevelOne(level:1),
                       ));
                 }),
-                button('Level 2 (Age 6)', () {
+                button(buttonTextStyle(label: 'Level 2 (Age 6)'), () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LevelOne(),
+                        builder: (context) => LevelOne(level:2),
                       ));
                 }),
-                button('Level 3 (Age 7)', () {
+                button(buttonTextStyle(label: 'Level 3 (Age 7)'), () {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LevelOne(),
+                        builder: (context) => LevelOne(level:3),
                       ));
                 }),
-                SizedBox(height: 30.0,),
+                SizedBox(
+                  height: 30.0,
+                ),
               ],
             ),
           ),

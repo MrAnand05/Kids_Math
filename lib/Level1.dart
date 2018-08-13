@@ -1,11 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:kids_math/RandomNumberG.dart';
-import 'package:kids_math/button.dart';
+import 'package:kids_math/Application.dart';
+import 'package:kids_math/LevelClass.dart';
 import 'dart:math';
 import 'package:kids_math/buttonStateful.dart';
 import 'package:kids_math/rod.dart';
 
+class _MyInherited extends InheritedWidget {
+  _MyInherited({
+    Key key,
+    @required Widget child,
+    @required this.data,
+  }) : super(key: key, child: child);
+
+  final MyInheritedWidgetState data;
+
+  @override
+  bool updateShouldNotify(_MyInherited oldWidget) {
+    return true;
+  }
+}
+
+class MyInheritedWidget extends StatefulWidget {
+  MyInheritedWidget({
+    Key key,
+    this.child,
+  }): super(key: key);
+
+  final Widget child;
+
+  @override
+  MyInheritedWidgetState createState() => new MyInheritedWidgetState();
+
+  static MyInheritedWidgetState of(BuildContext context){
+    return (context.inheritFromWidgetOfExactType(_MyInherited) as _MyInherited).data;
+  }
+}
+
+class MyInheritedWidgetState extends State<MyInheritedWidget>{
+  /// List of Items
+  List<Widget> scoreOnce = <Widget>[];
+  List<Widget> scoreTens = <Widget>[];
+
+  void addItem(Widget reference){
+    setState((){
+      if(scoreTens.length==7){scoreTens.clear();scoreOnce.clear();}
+      if(scoreOnce.length>8){
+        scoreOnce.clear();
+        scoreTens.add(Icon(Icons.star,color: Colors.orangeAccent,size: 50.0,));
+      }
+      else{
+        scoreOnce.add(Icon(Icons.star,color: Colors.orangeAccent,size: 35.0,));
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return new _MyInherited(
+      data: this,
+      child: widget.child,
+    );
+  }
+}
+
 class LevelOne extends StatefulWidget {
+  int level;
+  LevelOne({Key key,@required this.level}):super(key:key);
   LevelOneState levelOneState;
   @override
   State<StatefulWidget> createState() {
@@ -15,6 +75,7 @@ class LevelOne extends StatefulWidget {
 }
 
 class LevelOneState extends State<LevelOne> {
+  LevelClass l1=new LevelClass();
   bool _isAnswered=false;
   bool get isAnswered => _isAnswered;
   set isAnswered(bool sta) => _isAnswered = sta;
@@ -34,18 +95,18 @@ class LevelOneState extends State<LevelOne> {
 
   @override
   Widget build(BuildContext context) {
+    int score=0;
     isAnswered=false;
     options[c] = a + b;
     for (int i = 0; i < options.length; i++) {
       if (i != c) options[i] = generateRandomNo(min: 1,max: 18);
     }
-    return Scaffold(
-      appBar: AppBar(
-        actions: <Widget>[Icon(Icons.check), Icon(Icons.cancel)],
-      ),
+    return MyInheritedWidget (
+      child:Scaffold(
       body: Column(
         children: <Widget>[
           Row(
+            mainAxisAlignment:MainAxisAlignment.center,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.fromLTRB(10.0, 30.0, 5.0, 0.0),
@@ -64,13 +125,6 @@ class LevelOneState extends State<LevelOne> {
                 child:
                     createCircle(number: b, radius: 105.0, textStyle: numberS,color: Color(0XFFCE93D8)),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: Text(
-                  '=',
-                  style: numberS,
-                ),
-              ),
             ],
           ),
           Padding(
@@ -79,11 +133,10 @@ class LevelOneState extends State<LevelOne> {
               children: createRod(a,'+',b),
               mainAxisAlignment: MainAxisAlignment.center,
             ),
-          ),
-          Divider(
-            height: 40.0,
-            color: Colors.lightGreen,
-          ),
+          ),Text(
+                  '=====',
+                  style: TextStyle(fontSize: 30.0,letterSpacing: -6.0),
+                ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
@@ -117,21 +170,24 @@ class LevelOneState extends State<LevelOne> {
               ),
             ],
           ),
+          //scoreTens(),
+          starScore(),
           Divider(
-            height: 40.0,
+            height: 10.0,
             color: Colors.lightGreen,
           ),
-          button('Next', () {
+          button(buttonTextStyle(label: 'MORE'), () {
             setState(() {
               isAnswered = false;
               a = generateRandomNo(min: 1,max: 10);
               b = generateRandomNo(min: 1,max: 10);
               c = Random().nextInt(3);
             });
-          })
+          }),
+          l1.bottomNavigationBar(widget.level,'+',context),
         ],
       ),
-    );
+    ));
   }
 }
 
